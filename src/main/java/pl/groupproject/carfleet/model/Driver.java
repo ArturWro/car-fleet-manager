@@ -1,12 +1,19 @@
 package pl.groupproject.carfleet.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.context.annotation.EnableMBeanExport;
-
-import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -25,8 +32,10 @@ public class Driver {
     private String lastName;
     private String pesel;
     private String jobTitle;
+    @Getter
     private String passwordConfirm;
 
+    //adnotacja @Embebded i @Embedable poczytac co to robi i dlaczego
     //@Embedded private Car car;
 
     @ManyToMany //c*
@@ -37,6 +46,7 @@ public class Driver {
     private List<Car> cars;
 
 
+    //sprobujmy wrocic do @OneToMany i @ManyToOne
     //    @OneToMany(mappedBy = "drivers")
 //    private Set<Departure> departures;
     @ManyToOne
@@ -55,7 +65,4 @@ public class Driver {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
 }
