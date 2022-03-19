@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class CarsDto {
+public class CarDto {
     private Long id;
     private String carBrand;
     private String carModel;
@@ -17,4 +17,7 @@ public class CarsDto {
     private boolean reservation;
     private String update;
     private String deleteCar;
+    private String initialMileage;
+    private String finaleMileage;
+    private int amountOfFuel;
 }

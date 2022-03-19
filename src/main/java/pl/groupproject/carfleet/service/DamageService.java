@@ -1,11 +1,10 @@
 package pl.groupproject.carfleet.service;
 
+import java.util.List;
 import pl.groupproject.carfleet.dto.DamageDto;
 import pl.groupproject.carfleet.model.Damage;
 
-import java.util.List;
-
-
+//zbedny interfejs a same metody wolac w DamageService
 public interface DamageService {
 
     List<Damage> getAll();

@@ -1,35 +1,51 @@
 package pl.groupproject.carfleet.controller;
 
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import pl.groupproject.carfleet.dto.CarDto;
 import pl.groupproject.carfleet.dto.CarInformationDto;
-import pl.groupproject.carfleet.dto.CarsDto;
 import pl.groupproject.carfleet.service.CarService;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
-@Controller
+@RestController("/api/v1/cars")
 @RequiredArgsConstructor
+@Slf4j
 public class CarsController {
 
+    public static final String REDIRECT_CARS = "redirect:/cars";
     private final CarService service;
 
+    //instalujemy dodatek do IDE sonar lint
 
-    @GetMapping("/cars")
+    //wszystkie metody controllera zawsze public
+    // poczytac dlaczego nie zwracamy Stringa jako typu
+    @GetMapping
     public String allCars(Model model) {
-        List<CarsDto> cars = service.getAll();
+        List<CarDto> cars = service.getAll();
         model.addAttribute("carslist", cars);
         return "cars";
     }
 
-    @GetMapping("/addcar")
+    //zamieniamy na ResponseEntity bez ModelAndView
+    //odchodzimy od cammelCase tylko parametr jako param-param
+    @GetMapping("/add-car")
     ModelAndView createAddCarView() {
         ModelAndView modelAndView = new ModelAndView("addcar");
-        modelAndView.addObject("car", new CarInformationDto());
+        modelAndView.addObject("car", CarInformationDto.builder().build());
+        //
+        CarInformationDto.builder()
+            .withVinNr("12345")
+            .withId(1L)
+            .withCarBrand("BRAND")
+            .build();
         return modelAndView;
     }
 
@@ -40,11 +56,10 @@ public class CarsController {
         return modelAndView;
     }
 
+    //rozdzielamy na dwa endpointy add-car i endpoint edit-car
     @PostMapping(value = {"/addcar", "/editcar/**"})
     public String registration(@ModelAttribute("car") CarInformationDto carForm) {
-        service.createOrUpdateCar(carForm);
-
-        return "redirect:/cars";
+        return service.createCar(carForm);
     }
 
 
@@ -52,31 +67,16 @@ public class CarsController {
     public String reservation(HttpServletRequest request) {
         String parameter = request.getParameter("msg");
         service.makeReservation(parameter);
-        System.out.println(parameter);
+        log.info(parameter);
 
-        return "redirect:/cars";
+        return REDIRECT_CARS;
     }
 
     @GetMapping("/cars/delete/{id}")
     public String delete(@PathVariable Long id){
         service.deleteCar(id);
-        return "redirect:/cars";
+        return REDIRECT_CARS;
     }
-
-//    @PostMapping("/cars")
-//    public String carUpdate(HttpServletRequest request){
-//        String parameter = request.getParameter("update");
-//        service.updateCar(parameter);
-//        System.out.println(parameter);
-//
-//        return "redirect:/cars";
-//    }
-//    @PostMapping("/cars")
-//    public String carUpdate(@ModelAttribute("car") CarsDto carForm){
-//        service.updateCar(carForm.getUpdate());
-//
-//        return "redirect:/cars";
-//    }
 
 
 }

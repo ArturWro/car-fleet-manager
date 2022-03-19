@@ -1,18 +1,17 @@
 package pl.groupproject.carfleet.model;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum DamageType {
-    ENGINE("Silnik"),
-    CARSHEET("Karoseria"),
-    WHEEL("Koła"),
-    GLASS("Szyby");
+  //nigdy nie uzywamy polskiego jezyka w kodzie
+  ENGINE("Silnik"),
+  CARSHEET("Karoseria"),
+  WHEEL("Koła"),
+  GLASS("Szyby");
 
-    private String label;
+  private final String label;
 
-    DamageType(String label) {
-        this.label = label;
-    }
-
-    public String getLabel() {
-        return label;
-    }
 }

@@ -1,7 +1,7 @@
 package pl.groupproject.carfleet.validator;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -11,10 +11,10 @@ import pl.groupproject.carfleet.service.DriverService;
 
 
 @Component
+@RequiredArgsConstructor
 public class UserValidator implements Validator {
 
-    @Autowired
-    private DriverService driverService;
+    private final DriverService driverService;
 
     @Override
     public boolean supports(Class<?> aClass) {

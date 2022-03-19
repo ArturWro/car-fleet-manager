@@ -12,5 +12,6 @@ public class CarFleetApplicationTests {
     @Test
     public void contextLoads() {
     }
+    //testy maja byc nie 100% uzyj albo junit albo spock
 
 }

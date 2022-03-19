@@ -2,8 +2,7 @@ package pl.groupproject.carfleet.security;
 
 public interface SecurityService {
 
-   // String findLoggedInDriverEmail();
-    String findByLogin ();
+  String findByLogin();
 
-    void autoLogin(String login, String password);
+  void autoLogin(String login, String password);
 }

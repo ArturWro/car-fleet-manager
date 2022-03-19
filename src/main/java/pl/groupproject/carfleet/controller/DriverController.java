@@ -1,33 +1,31 @@
 package pl.groupproject.carfleet.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import pl.groupproject.carfleet.model.Driver;
 import pl.groupproject.carfleet.security.SecurityService;
 import pl.groupproject.carfleet.service.DriverService;
+import pl.groupproject.carfleet.validator.EmailValidator;
 import pl.groupproject.carfleet.validator.UserValidator;
+import pl.groupproject.carfleet.validator.Validator;
 
-import java.util.List;
-
-@Controller
+@RestController("/api/v1/driver")
+@RequiredArgsConstructor
 public class DriverController {
 
-    @Autowired
     private final DriverService driverService;
-    @Autowired
     private final SecurityService securityService;
-    @Autowired
     private final UserValidator userValidator;
-
-    public DriverController(DriverService driverService, SecurityService securityService, UserValidator userValidator) {
-        this.driverService = driverService;
-        this.securityService = securityService;
-        this.userValidator = userValidator;
-    }
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -37,6 +35,7 @@ public class DriverController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute("driverForm") Driver driverForm, BindingResult bindingResult) {
+        Validator.validate(new EmailValidator(), driverForm);
         userValidator.validate(driverForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
